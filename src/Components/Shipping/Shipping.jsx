@@ -17,7 +17,7 @@ export default function Shipping() {
   function payment(values) {
     return axios
       .post(
-        `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:5173`,
+        `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=https://freshcart-sable-nine.vercel.app`,
         {
           shippingAddress: values,
         },
