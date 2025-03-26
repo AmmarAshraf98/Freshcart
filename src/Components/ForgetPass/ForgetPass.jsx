@@ -26,7 +26,7 @@ export default function ForgetPass() {
       )
       .then(({ response }) => {
         setMessage(response?.data.message);
-        navigate("/freshCart/verifycode");
+        navigate("/verifycode");
         setLoading(false);
         return response;
       })
@@ -47,35 +47,35 @@ export default function ForgetPass() {
 
   return (
     <>
-      <div className="container">
-        <h2 className="my-5 text-main text-center ">Please enter your email</h2>
+      <div className='container'>
+        <h2 className='my-5 text-main text-center '>Please enter your email</h2>
 
         {loading ? (
           <Loading />
         ) : (
           <form onSubmit={formik.handleSubmit}>
-            <div className="form-group mb-3">
-              <label htmlFor="email" className="mb-2">
+            <div className='form-group mb-3'>
+              <label htmlFor='email' className='mb-2'>
                 E-mail :
               </label>
               <input
-                type="email"
-                name="email"
-                id="email"
-                className="form-control"
+                type='email'
+                name='email'
+                id='email'
+                className='form-control'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
             </div>
-            <button className="btn bg-main text-white w-100" type="submit">
+            <button className='btn bg-main text-white w-100' type='submit'>
               Send
             </button>
           </form>
         )}
 
         {message && (
-          <h4 className="alert alert-danger py-3 text-center my-4">
+          <h4 className='alert alert-danger py-3 text-center my-4'>
             {message}
           </h4>
         )}

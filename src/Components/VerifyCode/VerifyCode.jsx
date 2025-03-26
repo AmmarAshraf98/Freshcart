@@ -27,7 +27,7 @@ export default function VerifyCode() {
       .then(({ response }) => {
         setLoading(false);
         setMessage(response?.data.message);
-        navigate("/freshCart/resetPass");
+        navigate("/resetPass");
         return response;
       })
       .catch(({ response }) => {
@@ -47,8 +47,8 @@ export default function VerifyCode() {
 
   return (
     <>
-      <div className="container">
-        <h2 className="text-main my-5 text-center fw-bold">
+      <div className='container'>
+        <h2 className='text-main my-5 text-center fw-bold'>
           Send verification code
         </h2>
 
@@ -56,27 +56,27 @@ export default function VerifyCode() {
           <Loading />
         ) : (
           <form onSubmit={formik.handleSubmit}>
-            <div className="form-group mb-3">
-              <label htmlFor="resetCode" className="mb-2">
+            <div className='form-group mb-3'>
+              <label htmlFor='resetCode' className='mb-2'>
                 Verification code :
               </label>
               <input
-                type="text"
-                name="resetCode"
-                id="resetCode"
-                className="form-control"
+                type='text'
+                name='resetCode'
+                id='resetCode'
+                className='form-control'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.resetCode}
               />
             </div>
-            <button className="btn bg-main text-white w-100" type="submit">
+            <button className='btn bg-main text-white w-100' type='submit'>
               Send code
             </button>
           </form>
         )}
         {message && (
-          <div className="alert alert-danger my-4 text-center">{message}</div>
+          <div className='alert alert-danger my-4 text-center'>{message}</div>
         )}
       </div>
     </>

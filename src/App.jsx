@@ -116,7 +116,7 @@ function App() {
     if (localStorage.getItem("userToken")) {
       setToken(localStorage.getItem("userToken"));
     }
-  }, []);
+  }, [setToken]);
 
   return <RouterProvider router={routes}></RouterProvider>;
 }

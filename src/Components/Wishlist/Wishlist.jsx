@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { wishContext } from "../../Context/Wishlist";
-import { Link } from "react-router-dom";
-import Ratting from "../Ratting/Ratting";
 import { CartContext } from "../../Context/Cart";
 import { TokenContext } from "../../Context/Token";
 import toast from "react-hot-toast";
@@ -58,62 +56,64 @@ export default function Wishlist() {
   }
 
   // get wish product from wishlist
-  async function getProducts() {
+  const getProducts = useCallback(async () => {
     const { data } = await getWishProduct();
     setWishProd(data?.data);
     setLoading(false);
-  }
+  }, []);
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   return (
-    <section className="mi-h-60 ">
-      <div className="container">
+    <section className='mi-h-60 '>
+      <div className='container'>
         {loading && <Loading />}
 
         {wishProd.length === 0 ? (
           <img
             src={wishlistImg}
-            alt="your wishlist is empty"
-            className="mx-auto d-block w-50"
+            alt='your wishlist is empty'
+            className='mx-auto d-block w-50'
           />
         ) : (
           <>
-            <h2 className="text-main fw-bold text-center my-4">
-              You wishlist items <i className="fa-regular fa-heart me-2"></i>{" "}
+            <h2 className='text-main fw-bold text-center my-4'>
+              You wishlist items <i className='fa-regular fa-heart me-2'></i>{" "}
             </h2>
             {wishProd.map((product) => (
-              <div className="row align-items-center p-1" key={product.id}>
-                <div className="col-md-2">
+              <div className='row align-items-center p-1' key={product.id}>
+                <div className='col-md-2'>
                   <img
                     src={product.imageCover}
-                    alt="your product"
-                    className="w-100"
+                    alt='your product'
+                    className='w-100'
                   />
                 </div>
-                <div className="col-md-10">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="">
+                <div className='col-md-10'>
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <div className=''>
                       <p>{product.title}</p>
-                      <p className="text-main">
+                      <p className='text-main'>
                         Price : <span>{product.price}</span>
                       </p>
                       <p
-                        className="cursor-pointer text-danger fw-bold"
+                        className='cursor-pointer text-danger fw-bold'
                         onClick={() => {
                           removeFromWishList(product._id);
-                        }}>
-                        <i className="fa-regular fa-heart me-2"></i>Remove
+                        }}
+                      >
+                        <i className='fa-regular fa-heart me-2'></i>Remove
                       </p>
                     </div>
-                    <div className="">
+                    <div className=''>
                       <button
-                        className="btn bg-main text-white my-2"
+                        className='btn bg-main text-white my-2'
                         onClick={() => {
                           addproduct(product._id);
-                        }}>
+                        }}
+                      >
                         + add to cart
                       </button>
                     </div>

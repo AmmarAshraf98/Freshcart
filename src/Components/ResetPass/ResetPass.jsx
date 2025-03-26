@@ -41,7 +41,7 @@ export default function ResetPass() {
       .then(({ data }) => {
         localStorage.setItem("userToken", data.token);
         setToken(data.token);
-        navigate("/freshCart/login");
+        navigate("/login");
       })
       .catch((error) => {
         setLoading(false);
@@ -64,58 +64,58 @@ export default function ResetPass() {
       <Helmet>
         <title>Login Page</title>
         <meta
-          name="description"
-          content="Login page to be able to order from this site"
+          name='description'
+          content='Login page to be able to order from this site'
         />
       </Helmet>
-      <div className="container">
-        <h2 className="my-3">Login </h2>
-        {errorMesage && <div className="alert alert-danger">{errorMesage}</div>}
+      <div className='container'>
+        <h2 className='my-3'>Login </h2>
+        {errorMesage && <div className='alert alert-danger'>{errorMesage}</div>}
         <form onSubmit={resetPassord.handleSubmit}>
-          <div className="form-group mb-2">
-            <label htmlFor="email">E-mail : </label>
+          <div className='form-group mb-2'>
+            <label htmlFor='email'>E-mail : </label>
             <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
+              type='email'
+              className='form-control'
+              id='email'
+              name='email'
               value={resetPassord.values.email}
               onChange={resetPassord.handleChange}
               onBlur={resetPassord.handleBlur}
             />
             {resetPassord.errors.email && resetPassord.touched.email ? (
-              <div className="alert alert-danger py-1 mt-1">
+              <div className='alert alert-danger py-1 mt-1'>
                 {resetPassord.errors.email}
               </div>
             ) : null}
           </div>
-          <div className="form-group mb-2">
-            <label htmlFor="newPassword">Password : </label>
+          <div className='form-group mb-2'>
+            <label htmlFor='newPassword'>Password : </label>
             <input
-              type="password"
-              className="form-control"
-              id="newPassword"
-              name="newPassword"
+              type='password'
+              className='form-control'
+              id='newPassword'
+              name='newPassword'
               value={resetPassord.values.newPassword}
               onChange={resetPassord.handleChange}
               onBlur={resetPassord.handleBlur}
             />
             {resetPassord.errors.newPassword &&
               resetPassord.touched.newPassword && (
-                <div className="alert alert-danger py-1 mt-1">
+                <div className='alert alert-danger py-1 mt-1'>
                   {resetPassord.errors.newPassword}
                 </div>
               )}
           </div>
 
-          <div className="d-flex justify-content-between align-items-center">
+          <div className='d-flex justify-content-between align-items-center'>
             <button
-              type="submit"
+              type='submit'
               disabled={!(resetPassord.isValid && resetPassord.dirty)}
-              className="btn bg-main text-white"
+              className='btn bg-main text-white'
             >
               {Loading ? (
-                <i className="fa-solid fa-spinner fa-spin mx-1"></i>
+                <i className='fa-solid fa-spinner fa-spin mx-1'></i>
               ) : (
                 "Reset Password"
               )}

@@ -116,7 +116,7 @@ export default function Login() {
                     "Login"
                   )}
                 </button>
-                <Link to={"/freshCart/forgetpass"} className='text-primary'>
+                <Link to={"/forgetpass"} className='text-primary'>
                   forget password
                 </Link>
               </div>
