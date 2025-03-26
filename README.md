@@ -1,4 +1,4 @@
-Freshcart
+<h1>Freshcart</h1>
 
 A fully functional e-commerce web application built with Vite and React. The app includes user authentication, product listings, cart management, and secure online payment integration.
 
