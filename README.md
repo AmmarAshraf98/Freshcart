@@ -4,12 +4,20 @@ A fully functional e-commerce web application built with Vite and React. The app
 <br/>
 
 🚀 Features
-
-✅ User Authentication: Signup, login, and protected routes.
-✅ Product Catalog: Browse products with search functionality.
-✅ Cart Management: Add, update, and remove items from the cart.
-✅ Secure Checkout: Online payment integration.
-✅ Responsive Design: Fully optimized for different screen sizes.
+<ul>
+  <li>
+    ✅ User Authentication: Signup, login, and protected routes.
+  </li>
+  <li>
+    ✅ Cart Management: Add, update, and remove items from the cart.
+  </li>
+  <li>
+    ✅ Secure Checkout: Online payment integration.
+  </li>
+  <li>
+    ✅ Responsive Design: Fully optimized for different screen sizes.
+  </li>
+</ul>
 
 <br/>
 🛠️ Tech Stack
