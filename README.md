@@ -1,9 +1,10 @@
-🛒 Freshcart
-
+<h1>🛒 Freshcart</h1>
+<p>
 A fully functional e-commerce web application built with Vite and React. The app includes user authentication, product listings, cart management, and secure online payment integration.
 <br/>
+</p>
 
-🚀 Features
+<h2>🚀 Features</h2>
 <ul>
   <li>
     ✅ User Authentication: Signup, login, and protected routes.
@@ -20,7 +21,7 @@ A fully functional e-commerce web application built with Vite and React. The app
 </ul>
 
 <br/>
-🛠️ Tech Stack
+<h2>🛠️ Tech Stack</h2>
 
 Frontend: Vite, React, Context API, React Router, Axios, Bootstrap.
 Payment Integration: [Stripe]
