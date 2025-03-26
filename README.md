@@ -23,5 +23,7 @@ A fully functional e-commerce web application built with Vite and React. The app
 <br/>
 <h2>🛠️ Tech Stack</h2>
 
-Frontend: Vite, React, Context API, React Router, Axios, Bootstrap.
-Payment Integration: [Stripe]
+<p>
+<strong>  Frontend</strong>: Vite, React, Context API, React Router, Axios, Bootstrap.
+</p>
+<strong>Payment Integration</strong>: [Stripe]
