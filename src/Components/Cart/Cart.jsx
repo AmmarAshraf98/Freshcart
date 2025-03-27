@@ -1,56 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { CartContext } from "../../Context/Cart";
 import Loading from "../Loading/Loading";
-import axios from "axios";
-import { TokenContext } from "../../Context/Token";
 import { Link } from "react-router-dom";
 
 import emptyCart from "../../images/images.jpg";
+import CartItem from "./CartItem";
 
 export default function Cart() {
-  // loading
-  const [loading, setLoading] = useState(false);
-
   // get function from
-  let { getCartProduct, deletProduct, changeProductCount } =
-    useContext(CartContext);
+  const {
+    changeProductCount,
+    data,
+    cartNumber,
+    totalPrice,
+    getCartProduct,
+    loading,
+  } = useContext(CartContext);
 
-  // token and headers
-  const { token } = useContext(TokenContext);
-  let headers = {
-    token: token,
-  };
-
-  // save data in my state
-  const [cartDetails, setCartDetails] = useState(null);
-
-  // call api to get cart items
-  async function getItems() {
-    let { data } = await getCartProduct();
-
-    // send the main object from response
-    setCartDetails(data);
-    setLoading(false);
-  }
-
-  // delet product
-  async function deletItem(id) {
-    let { data } = await deletProduct(id);
-    setCartDetails(data);
-    setLoading(false);
-  }
-
-  // change product count
-  async function setProductCount(id, count) {
-    const { data } = await changeProductCount(id, count);
-    setCartDetails(data);
-    setLoading(false);
-  }
+  // // delet product
+  // async function deletItem(id) {
+  //   const message = await deletProduct(id);
+  //   if (message === "product deleted successfully ! ✅") {
+  //     toast.success(message, {
+  //       position: "top-right",
+  //     });
+  //   } else {
+  //     toast.error("please login first.", {
+  //       position: "top-right",
+  //     });
+  //   }
+  // }
 
   useEffect(() => {
-    getItems();
-  }, []);
+    getCartProduct();
+  }, [getCartProduct]);
+
+  if (loading) return <Loading />;
 
   return (
     <section className='py-5'>
@@ -58,66 +44,64 @@ export default function Cart() {
         <title>Cart</title>
         <meta name='description' content='Your all selected items' />
       </Helmet>
-      {loading && <Loading />}
-      {cartDetails ? (
+      {data?.length > 0 ? (
         <div className='container py-4 bg-main-light'>
           <h1 className='h2 text-center'>Shop Cart</h1>
           <h6 className='text-main fw-bold'>
-            Total Cart Items : {cartDetails?.numOfCartItems} EGP
+            Total Cart Items : {cartNumber} EGP
           </h6>
-          <h6 className='text-main fw-bold'>
-            Total Price : {cartDetails?.data.totalCartPrice} EGP
-          </h6>
-          {cartDetails?.data.products?.map((product) => (
-            <div
-              className='row align-items-center p-1'
-              key={product.product.id}
-            >
-              <div className='col-md-2'>
-                <img
-                  src={product.product.imageCover}
-                  alt='your product'
-                  className='w-100'
-                />
-              </div>
-              <div className='col-md-10'>
-                <div className='row align-items-center'>
-                  <div className='col-sm-9'>
-                    <p>product name and description</p>
-                    <p className='text-main'>
-                      Price : <span>{product.price}</span>
-                    </p>
-                    <p
-                      className='cursor-pointer'
-                      onClick={() => deletItem(product.product.id)}
-                    >
-                      <i className='fa-solid fa-trash text-main me-2'></i>
-                      Remove
-                    </p>
-                  </div>
-                  <div className='col-sm-3'>
-                    <button
-                      className='btn btn-outline-success'
-                      onClick={() =>
-                        setProductCount(product.product.id, product.count + 1)
-                      }
-                    >
-                      +
-                    </button>
-                    <span className='mx-2'>{product.count}</span>
-                    <button
-                      className='btn btn-outline-success'
-                      onClick={() =>
-                        setProductCount(product.product.id, product.count - 1)
-                      }
-                      disabled={product.count === 1}
-                    >
-                      -
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <h6 className='text-main fw-bold'>Total Price : {totalPrice} EGP</h6>
+          {data.map((product) => (
+            <CartItem key={product._id} product={product} />
+            // <div
+            //   className='row align-items-center p-1'
+            //   key={product.product.id}
+            // >
+            //   <div className='col-md-2'>
+            //     <img
+            //       src={product.product.imageCover}
+            //       alt='your product'
+            //       className='w-100'
+            //     />
+            //   </div>
+            //   <div className='col-md-10'>
+            //     <div className='row align-items-center'>
+            //       <div className='col-sm-9'>
+            //         <p>product name and description</p>
+            //         <p className='text-main'>
+            //           Price : <span>{product.price}</span>
+            //         </p>
+            //         <p
+            //           className='cursor-pointer'
+            //           onClick={() => deletItem(product.product.id)}
+            //         >
+            //           <i className='fa-solid fa-trash text-main me-2'></i>
+            //           Remove
+            //         </p>
+            //       </div>
+            //       <div className='col-sm-3'>
+            //         <button
+            //           className='btn btn-outline-success'
+            //           onClick={() =>
+            //             setProductCount(product.product.id, product.count + 1)
+            //           }
+            //         >
+            //           +
+            //         </button>
+            //         <span className='mx-2'>{product.count}</span>
+            //         <button
+            //           className='btn btn-outline-success'
+            //           onClick={() =>
+            //             setProductCount(product.product.id, product.count - 1)
+            //           }
+            //           disabled={product.count === 1}
+            //         >
+            //           -
+            //         </button>
+            //       </div>
+            //     </div>
+            //   </div>
+            // </div>
           ))}
           <Link
             to={"/shppingaddress"}

@@ -1,18 +1,32 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { TokenContext } from "./Token";
 import axios from "axios";
 
 export let CartContext = createContext();
 
 export default function CartContextProvider(props) {
+  // loading
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [cart, setCart] = useState(0);
+  const [cartNumber, setCartNumber] = useState(0);
   const [cartId, setCartId] = useState(null);
-
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [error, setError] = useState("");
   //get token to be sent to database with each request
   let { token } = useContext(TokenContext);
-  let headers = {
-    token: token,
+  const headers = useMemo(() => ({ token: token }), [token]);
+
+  const setCartData = (data) => {
+    setData(data?.data?.data.products);
+    setCartNumber(data?.data?.numOfCartItems);
+    setTotalPrice(data?.data?.totalPrice);
   };
 
   // call api to add item to my cart in data-base
@@ -28,27 +42,30 @@ export default function CartContextProvider(props) {
         }
       )
       .then((response) => {
-        setData(response);
-        setCart(response.data.numOfCartItems);
-        return response;
+        setCartData(response);
+        return response?.data?.message;
       })
-      .catch((error) => error);
+      .catch((error) => error.message ?? "something went wrong ! ⛔");
   }
 
-  // get items i set from cart
-  function getCartProduct() {
-    return axios
+  // get items i set in cart
+  const getCartProduct = useCallback(() => {
+    setLoading(true);
+    axios
       .get(`https://ecommerce.routemisr.com/api/v1/cart`, { headers })
       .then((data) => {
         if (data !== null || undefined) {
-          setData(data);
-          setCartId(data.data.data._id);
-          setCart(data.data.numOfCartItems);
+          // setData(data?.data?.data.products);
+          // setCartId(data?.data?.data._id);
+          // setCartNumber(data?.data?.numOfCartItems);
+          // setTotalPrice(data?.data?.totalPrice);
+          setCartData(data);
+          setCartId(data?.data?.data._id);
         }
-        return data;
       })
-      .catch((err) => err);
-  }
+      .catch((err) => setError(err?.message || "something went wrong ⛔!"))
+      .finally(() => setLoading(false));
+  }, [headers]);
 
   // delet product from cart
   function deletProduct(id) {
@@ -57,8 +74,12 @@ export default function CartContextProvider(props) {
         headers,
       })
       .then((response) => {
-        setData(response);
-        return response;
+        if (response?.data?.status === "success") {
+          setCartData(response);
+          return "product deleted successfully ! ✅";
+        } else {
+          return "somthing went wrong ! ⛔";
+        }
       })
       .catch((error) => error);
   }
@@ -75,14 +96,18 @@ export default function CartContextProvider(props) {
           headers,
         }
       )
-      .then((response) => response)
+      .then((response) => {
+        console.log(response);
+        setCartData(response);
+        return response;
+      })
       .catch((error) => error);
   }
 
   useEffect(() => {
     if (!token) return;
     getCartProduct();
-  }, []);
+  }, [getCartProduct, token]);
 
   return (
     <CartContext.Provider
@@ -92,8 +117,11 @@ export default function CartContextProvider(props) {
         deletProduct,
         changeProductCount,
         data,
-        cart,
+        cartNumber,
         cartId,
+        totalPrice,
+        error,
+        loading,
       }}
     >
       {props.children}

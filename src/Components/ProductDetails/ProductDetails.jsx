@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Ratting from "../Ratting/Ratting";
@@ -11,6 +11,7 @@ import Slider from "react-slick";
 import { wishContext } from "../../Context/Wishlist";
 
 export default function ProductDetails() {
+  const [isClicked, setIsClicked] = useState(false);
   // get token id excist
   let { token } = useContext(TokenContext);
 
@@ -34,6 +35,7 @@ export default function ProductDetails() {
   // function to conect my jsx to my func in context
   async function addproduct(id) {
     if (token) {
+      setIsClicked(true);
       let { data } = await addToCart(id);
       toast.success(data?.message, {
         position: "top-right",
@@ -84,20 +86,20 @@ export default function ProductDetails() {
 
   return (
     <>
-      <div className="container my-5">
-        {isError && <div className="alert alert-danger">{isError}</div>}
+      <div className='container my-5'>
+        {isError && <div className='alert alert-danger'>{isError}</div>}
         {isLoading ? (
           <Loading />
         ) : (
-          <div className="row align-items-center gy-5">
+          <div className='row align-items-center gy-5'>
             {/* slider */}
-            <div className="col-md-4">
+            <div className='col-md-4'>
               <Slider {...settings}>
                 {data?.data.data.images.map((img, index) => (
                   <img
                     key={index}
                     src={img}
-                    className="w-100"
+                    className='w-100'
                     height={400}
                     alt={data?.data.data.title}
                   />
@@ -106,35 +108,38 @@ export default function ProductDetails() {
             </div>
 
             {/* row of data */}
-            <div className="col-md-8">
-              <div className="d-flex align-items-center justify-content-between mb-3">
-                <span className="d-block">
+            <div className='col-md-8'>
+              <div className='d-flex align-items-center justify-content-between mb-3'>
+                <span className='d-block'>
                   add
                   <i
-                    className="fa-regular fa-heart text-main cursor-pointer mx-1"
-                    onClick={() => addToWishList(data?.data.data._id)}></i>
+                    className='fa-regular fa-heart text-main cursor-pointer mx-1'
+                    onClick={() => addToWishList(data?.data.data._id)}
+                  ></i>
                 </span>
-                <span className="d-block">
+                <span className='d-block'>
                   remove
                   <i
-                    className="fa-solid fa-heart text-main cursor-pointer mx-1"
+                    className='fa-solid fa-heart text-main cursor-pointer mx-1'
                     onClick={() => {
                       removeFromWishList(data?.data.data._id);
-                    }}></i>
+                    }}
+                  ></i>
                 </span>
               </div>
 
-              <h2 className="mb-2">{data?.data.data.title}</h2>
-              <p className="mb3">{data?.data.data.description}</p>
+              <h2 className='mb-2'>{data?.data.data.title}</h2>
+              <p className='mb3'>{data?.data.data.description}</p>
               <Ratting
                 price={data?.data.data.price}
                 rate={data?.data.data.ratingsAverage}
               />
               <button
-                className="btn text-white w-100 my-2 bg-main"
+                className='btn text-white w-100 my-2 bg-main'
                 onClick={() => {
                   addproduct(data?.data.data.id);
-                }}>
+                }}
+              >
                 + add to cart
               </button>
             </div>
