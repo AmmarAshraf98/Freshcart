@@ -1,16 +1,20 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../../Context/Cart";
 import toast from "react-hot-toast";
 
 export default function CartItem({ product }) {
   // loading
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({
+    delete: false,
+    changeCounter: false,
+  });
 
   // get function from
   let { deletProduct, changeProductCount } = useContext(CartContext);
 
   // delet product
   async function deletItem(id) {
+    setLoading({ ...loading, delete: true });
     const message = await deletProduct(id);
     if (message === "product deleted successfully ! ✅") {
       toast.success(message, {
@@ -21,11 +25,14 @@ export default function CartItem({ product }) {
         position: "top-right",
       });
     }
+    setLoading({ ...loading, delete: false });
   }
 
   // change product count
   async function setProductCount(id, count) {
+    setLoading({ ...loading, changeCounter: true });
     await changeProductCount(id, count);
+    setLoading({ ...loading, changeCounter: false });
   }
 
   return (
@@ -47,19 +54,34 @@ export default function CartItem({ product }) {
             <p
               className='cursor-pointer'
               onClick={() => deletItem(product.product.id)}
+              disabled={loading.delete}
             >
-              <i className='fa-solid fa-trash text-main me-2'></i>
-              Remove
+              {loading.delete ? (
+                <>
+                  <i className='fa-solid fa-spinner fa-spin text-main me-2'></i>
+                  Deleting ⏳
+                </>
+              ) : (
+                <>
+                  <i className='fa-solid fa-trash text-main me-2'></i>
+                  Remove
+                </>
+              )}
             </p>
           </div>
           <div className='col-sm-3'>
             <button
+              disabled={loading.changeCounter}
               className='btn btn-outline-success'
               onClick={() =>
                 setProductCount(product.product.id, product.count + 1)
               }
             >
-              +
+              {loading.changeCounter ? (
+                <i className='fa-solid fa-spinner fa-spin mx-1'></i>
+              ) : (
+                "+"
+              )}
             </button>
             <span className='mx-2'>{product.count}</span>
             <button
@@ -67,9 +89,13 @@ export default function CartItem({ product }) {
               onClick={() =>
                 setProductCount(product.product.id, product.count - 1)
               }
-              disabled={product.count === 1}
+              disabled={product.count === 1 || loading.changeCounter}
             >
-              -
+              {loading.changeCounter ? (
+                <i className='fa-solid fa-spinner fa-spin mx-1'></i>
+              ) : (
+                "-"
+              )}
             </button>
           </div>
         </div>

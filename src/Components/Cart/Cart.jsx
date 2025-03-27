@@ -1,36 +1,18 @@
 import React, { useContext, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import { CartContext } from "../../Context/Cart";
-import Loading from "../Loading/Loading";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 import emptyCart from "../../images/images.jpg";
+
+import { CartContext } from "../../Context/Cart";
+
+import Loading from "../Loading/Loading";
 import CartItem from "./CartItem";
 
 export default function Cart() {
   // get function from
-  const {
-    changeProductCount,
-    data,
-    cartNumber,
-    totalPrice,
-    getCartProduct,
-    loading,
-  } = useContext(CartContext);
-
-  // // delet product
-  // async function deletItem(id) {
-  //   const message = await deletProduct(id);
-  //   if (message === "product deleted successfully ! ✅") {
-  //     toast.success(message, {
-  //       position: "top-right",
-  //     });
-  //   } else {
-  //     toast.error("please login first.", {
-  //       position: "top-right",
-  //     });
-  //   }
-  // }
+  const { data, cartNumber, totalPrice, getCartProduct, loading } =
+    useContext(CartContext);
 
   useEffect(() => {
     getCartProduct();

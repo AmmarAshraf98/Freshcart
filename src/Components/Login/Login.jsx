@@ -25,7 +25,7 @@ export default function Login() {
       .required("Password is required"),
   });
 
-  let { setToken } = useContext(TokenContext);
+  const { setToken } = useContext(TokenContext);
 
   async function callLogApi(requestBody) {
     seterrorMesage("");

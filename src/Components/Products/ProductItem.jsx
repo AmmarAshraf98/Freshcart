@@ -66,13 +66,19 @@ export default function ProductItem({ product }) {
       </Link>
 
       <button
-        className='btn text-white w-100 my-2'
+        className={`btn text-white text-center w-100 my-2 ${
+          isClicked ? "not-allowed" : ""
+        }`}
         onClick={() => {
           addproduct(product._id);
         }}
         disabled={isClicked}
       >
-        {isClicked ? "Loading..." : " add to cart"}
+        {isClicked ? (
+          <i className='fa-solid fa-spinner fa-spin mx-1'></i>
+        ) : (
+          "add to cart"
+        )}
       </button>
     </div>
   );

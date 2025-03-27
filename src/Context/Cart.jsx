@@ -9,16 +9,17 @@ import {
 import { TokenContext } from "./Token";
 import axios from "axios";
 
-export let CartContext = createContext();
+export const CartContext = createContext();
 
 export default function CartContextProvider(props) {
   // loading
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [cartNumber, setCartNumber] = useState(0);
   const [cartId, setCartId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState("");
+
   //get token to be sent to database with each request
   let { token } = useContext(TokenContext);
   const headers = useMemo(() => ({ token: token }), [token]);
@@ -55,10 +56,6 @@ export default function CartContextProvider(props) {
       .get(`https://ecommerce.routemisr.com/api/v1/cart`, { headers })
       .then((data) => {
         if (data !== null || undefined) {
-          // setData(data?.data?.data.products);
-          // setCartId(data?.data?.data._id);
-          // setCartNumber(data?.data?.numOfCartItems);
-          // setTotalPrice(data?.data?.totalPrice);
           setCartData(data);
           setCartId(data?.data?.data._id);
         }
