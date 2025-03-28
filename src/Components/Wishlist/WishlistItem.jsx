@@ -58,16 +58,17 @@ export default function WishlistItem({ product }) {
         <img src={product.imageCover} alt='your product' className='w-100' />
       </div>
       <div className='col-md-10'>
-        <div className='d-flex justify-content-between align-items-center'>
-          <div className=''>
-            <p>{product.title}</p>
-            <p className='text-main'>
-              Price : <span>{product.price}</span>
-            </p>
+        <div className=''>
+          <p>{product.title}</p>
+          <p className='text-main'>
+            Price : <span>{product.price}</span>
+          </p>
+
+          <div className='d-flex align-items-center justify-content-between'>
             <p
-              className={
+              className={`${
                 clickedBtn.removeClicked ? "not-allowed" : "cursor-pointer"
-              }
+              } mb-0`}
               onClick={() => {
                 removeFromWishList(product._id);
               }}
@@ -85,10 +86,8 @@ export default function WishlistItem({ product }) {
                 </>
               )}
             </p>
-          </div>
-          <div className=''>
             <button
-              className={`btn bg-main text-white my-2 ${
+              className={`btn bg-main text-white my-1 mx-2${
                 clickedBtn.addClicked ? "not-allowed" : ""
               }`}
               onClick={() => {
@@ -102,7 +101,7 @@ export default function WishlistItem({ product }) {
                   Adding{" "}
                 </>
               ) : (
-                "add to cart"
+                "🛒"
               )}
             </button>
           </div>

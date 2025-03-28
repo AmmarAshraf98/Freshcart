@@ -6,17 +6,22 @@ import { CartContext } from "../../Context/Cart";
 import { wishContext } from "../../Context/Wishlist";
 
 export default function Navbar() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   // token to handle display UI
-  let { token, setToken } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
 
   // number of cart items
-  let { cartNumber } = useContext(CartContext);
+  const {
+    dataInformation: { products },
+  } = useContext(CartContext);
+
+  const cartNumber = products?.length;
 
   // wish list usage
   const { wishListItems } = useContext(wishContext);
   const wishListCount = wishListItems?.length;
+
   // logout method depend on token in local storage
   function logOut() {
     localStorage.removeItem("userToken");

@@ -8,27 +8,54 @@ import {
 } from "react";
 import { TokenContext } from "./Token";
 import axios from "axios";
+import { useQuery } from "react-query";
 
 export const CartContext = createContext();
 
 export default function CartContextProvider(props) {
   // loading
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
-  const [cartNumber, setCartNumber] = useState(0);
-  const [cartId, setCartId] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState("");
 
+  const [dataInformation, setDataInformation] = useState({
+    products: [],
+    totalPrice: 0,
+    cartId: null,
+  });
+
   //get token to be sent to database with each request
-  let { token } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
   const headers = useMemo(() => ({ token: token }), [token]);
 
-  const setCartData = (data) => {
-    setData(data?.data?.data.products);
-    setCartNumber(data?.data?.numOfCartItems);
-    setTotalPrice(data?.data?.totalPrice);
-  };
+  // method to get products from api
+  function getAllProduct() {
+    return axios.get(`https://ecommerce.routemisr.com/api/v1/products`);
+  }
+
+  const {
+    isLoading,
+    data: productList,
+    isError,
+  } = useQuery("featuerProducts", getAllProduct);
+
+  // get items i set in cart
+  const getCartProduct = useCallback(() => {
+    setLoading(true);
+
+    axios
+      .get(`https://ecommerce.routemisr.com/api/v1/cart`, { headers })
+      .then((data) => {
+        if (data !== null || undefined) {
+          setDataInformation({
+            products: data?.data?.data.products,
+            totalPrice: data?.data?.data?.totalCartPrice,
+            cartId: data?.data?._id,
+          });
+        }
+      })
+      .catch((err) => setError(err?.message || "something went wrong ⛔!"))
+      .finally(() => setLoading(false));
+  }, [headers]);
 
   // call api to add item to my cart in data-base
   function addToCart(id) {
@@ -43,26 +70,11 @@ export default function CartContextProvider(props) {
         }
       )
       .then((response) => {
-        setCartData(response);
+        getCartProduct();
         return response?.data?.message;
       })
       .catch((error) => error.message ?? "something went wrong ! ⛔");
   }
-
-  // get items i set in cart
-  const getCartProduct = useCallback(() => {
-    setLoading(true);
-    axios
-      .get(`https://ecommerce.routemisr.com/api/v1/cart`, { headers })
-      .then((data) => {
-        if (data !== null || undefined) {
-          setCartData(data);
-          setCartId(data?.data?.data._id);
-        }
-      })
-      .catch((err) => setError(err?.message || "something went wrong ⛔!"))
-      .finally(() => setLoading(false));
-  }, [headers]);
 
   // delet product from cart
   function deletProduct(id) {
@@ -72,7 +84,16 @@ export default function CartContextProvider(props) {
       })
       .then((response) => {
         if (response?.data?.status === "success") {
-          setCartData(response);
+          const cartProdtcs = response?.data?.data.products;
+          const selectedItems = cartProdtcs.filter(
+            (item) => item.product !== id
+          );
+
+          setDataInformation((prev) => ({
+            ...prev,
+            products: selectedItems,
+            totalPrice: response?.data?.data?.totalCartPrice,
+          }));
           return "product deleted successfully ! ✅";
         } else {
           return "somthing went wrong ! ⛔";
@@ -94,7 +115,14 @@ export default function CartContextProvider(props) {
         }
       )
       .then((response) => {
-        setCartData(response);
+        const cartProdtcs = response?.data?.data.products;
+
+        setDataInformation((prev) => ({
+          ...prev,
+          products: cartProdtcs,
+          totalPrice: response?.data?.data?.totalCartPrice,
+        }));
+
         return response;
       })
       .catch((error) => error);
@@ -109,15 +137,14 @@ export default function CartContextProvider(props) {
     <CartContext.Provider
       value={{
         addToCart,
-        getCartProduct,
         deletProduct,
         changeProductCount,
-        data,
-        cartNumber,
-        cartId,
-        totalPrice,
+        dataInformation,
         error,
         loading,
+        isLoading,
+        productList,
+        isError,
       }}
     >
       {props.children}

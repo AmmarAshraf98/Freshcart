@@ -1,16 +1,10 @@
-import axios from "axios";
 import Loading from "../Loading/Loading";
-import { useQuery } from "react-query";
 import ProductItem from "./ProductItem";
+import { useContext } from "react";
+import { CartContext } from "../../Context/Cart";
 
 export default function Products() {
-  // method to get products from api
-  function getProducts() {
-    return axios.get(`https://ecommerce.routemisr.com/api/v1/products`);
-  }
-
-  const { isLoading, data, isError } = useQuery("featuerProducts", getProducts);
-
+  const { isLoading, isError, productList: data } = useContext(CartContext);
   if (isLoading) return <Loading />;
 
   if (isError) return <div className='alert alert-danger'>{isError}</div>;

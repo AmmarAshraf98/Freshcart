@@ -10,11 +10,16 @@ import Empty from "../Utilites/Empty";
 
 export default function Cart() {
   // get function from
-  const { data, cartNumber, totalPrice, loading } = useContext(CartContext);
+  const {
+    dataInformation: { products: data, totalPrice },
+    loading,
+  } = useContext(CartContext);
 
   if (loading) return <Loading />;
 
   if (!data?.length > 0) return <Empty message='Your cart is empty' />;
+
+  const cartNumber = data.length;
 
   return (
     <section className='py-5'>
@@ -25,11 +30,9 @@ export default function Cart() {
       {data?.length > 0 && (
         <div className='container py-4 bg-main-light'>
           <h1 className='h2 text-center'>Shop Cart</h1>
-          <h6 className='text-main fw-bold'>
-            Total Cart Items : {cartNumber} EGP
-          </h6>
+          <h6 className='text-main fw-bold'>Total Cart Items : {cartNumber}</h6>
           <h6 className='text-main fw-bold'>Total Price : {totalPrice} EGP</h6>
-          {data.map((product) => (
+          {data?.map((product) => (
             <CartItem key={product._id} product={product} />
           ))}
           <Link
