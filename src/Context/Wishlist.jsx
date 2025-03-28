@@ -1,18 +1,31 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { TokenContext } from "./Token";
 import axios from "axios";
 
-export let wishContext = createContext();
+export const wishContext = createContext();
 
 export default function WishlistProvider(props) {
+  const [loading, setLoading] = useState(true);
+  const [errMessage, setErrMessage] = useState("");
+
   // state for wish items
-  const [items, setItems] = useState(null);
+  const [wishListItems, setWishListItems] = useState(null);
+  // const [wishListCount, setWishListCount] = useState(0);
 
   //get token to be sent to database with each request
-  let { token } = useContext(TokenContext);
-  let headers = {
-    token: token,
-  };
+  const { token } = useContext(TokenContext);
+  const headers = useMemo(() => {
+    return {
+      token: token,
+    };
+  }, [token]);
 
   //   add product to wish list
   function addTolist(productId) {
@@ -27,7 +40,6 @@ export default function WishlistProvider(props) {
         }
       )
       .then((response) => {
-        setItems(response);
         return response;
       })
       .catch((error) => error);
@@ -40,33 +52,56 @@ export default function WishlistProvider(props) {
         headers,
       })
       .then((response) => {
-        setItems(response);
+        // status: "success";
+        if (response?.data.status === "success")
+          setWishListItems((items) =>
+            items.filter((item) => item.id !== productId)
+          );
         return response;
       })
       .catch((error) => error);
   }
 
   // get wish product
-  function getWishProduct() {
-    return axios
-      .get(`https://ecommerce.routemisr.com/api/v1/wishlist`, {
-        headers,
-      })
-      .then((response) => {
-        setItems(response);
-        return response;
-      })
-      .catch((error) => error);
-  }
+  const getWishProduct = useCallback(
+    function getWishProduct() {
+      setLoading(true);
+      return axios
+        .get(`https://ecommerce.routemisr.com/api/v1/wishlist`, {
+          headers,
+        })
+        .then((response) => {
+          if (response.statusText !== "OK")
+            throw new Error("Network Error !⛔");
+          if (response.statusText === "OK") {
+            setWishListItems(response?.data?.data);
+            // setWishListCount(response?.data?.count);
+            setLoading(false);
+            return response;
+          }
+        })
+        .catch((error) => {
+          setErrMessage(error.message || error);
+        })
+        .finally(() => setLoading(false));
+    },
+    [headers]
+  );
 
   useEffect(() => {
     if (!token) return;
     getWishProduct();
-  }, []);
+  }, [getWishProduct, token]);
 
   return (
     <wishContext.Provider
-      value={{ addTolist, removeFromList, items, getWishProduct }}
+      value={{
+        addTolist,
+        removeFromList,
+        wishListItems,
+        getWishProduct,
+        loading,
+      }}
     >
       {props.children}
     </wishContext.Provider>

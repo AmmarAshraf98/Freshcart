@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { TokenContext } from "../../Context/Token";
 import axios from "axios";
 import { CartContext } from "../../Context/Cart";
+
 export default function Shipping() {
   // get token
   const { token } = useContext(TokenContext);
@@ -36,8 +37,6 @@ export default function Shipping() {
     const { data } = await payment(values);
 
     window.location.href = data.session.url;
-
-    console.log(data);
   }
 
   const validationSchema = Yup.object({

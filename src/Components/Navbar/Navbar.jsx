@@ -6,23 +6,23 @@ import { CartContext } from "../../Context/Cart";
 import { wishContext } from "../../Context/Wishlist";
 
 export default function Navbar() {
+  let navigate = useNavigate();
+
   // token to handle display UI
   let { token, setToken } = useContext(TokenContext);
-
-  let navigate = useNavigate();
 
   // number of cart items
   let { cartNumber } = useContext(CartContext);
 
+  // wish list usage
+  const { wishListItems } = useContext(wishContext);
+  const wishListCount = wishListItems?.length;
   // logout method depend on token in local storage
   function logOut() {
     localStorage.removeItem("userToken");
     setToken(null);
     navigate("/");
   }
-
-  // wish list usage
-  const { items } = useContext(wishContext);
 
   return (
     <>
@@ -91,7 +91,7 @@ export default function Navbar() {
                       <span className='position-relative'>
                         <i className='fa-regular fa-heart'></i>
                         <span className='position-absolute  p-1 top-0 start-100 translate-middle badge rounded-pill bg-danger'>
-                          {items?.data.data.length}
+                          {wishListCount}
                         </span>
                       </span>
                     </NavLink>

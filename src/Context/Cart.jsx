@@ -94,7 +94,6 @@ export default function CartContextProvider(props) {
         }
       )
       .then((response) => {
-        console.log(response);
         setCartData(response);
         return response;
       })

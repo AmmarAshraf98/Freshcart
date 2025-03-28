@@ -13,7 +13,7 @@ export default function ProductItem({ product }) {
   let { token } = useContext(TokenContext);
 
   // Wish list method
-  const { addTolist } = useContext(wishContext);
+  const { addTolist, getWishProduct } = useContext(wishContext);
 
   // get function to add to cart
   let { addToCart } = useContext(CartContext);
@@ -22,6 +22,8 @@ export default function ProductItem({ product }) {
   async function addToWishList(id) {
     if (token) {
       const { data } = await addTolist(id);
+
+      if (data?.status === "success") getWishProduct();
       toast.success(data?.message, {
         position: "top-right",
       });
@@ -50,7 +52,9 @@ export default function ProductItem({ product }) {
 
   return (
     <div
-      className='col-sm-4 col-md-3 col-lg-2 cursor-pointer product'
+      className={`col-sm-4 col-md-3 col-lg-2 product ${
+        isClicked ? "" : "cursor-pointer"
+      }`}
       key={product._id}
     >
       <i

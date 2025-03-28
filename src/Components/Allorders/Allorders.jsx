@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useId, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import Loading from "../Loading/Loading";
 import axios from "axios";
-import { CartContext } from "../../Context/Cart";
 import { TokenContext } from "../../Context/Token";
 import { jwtDecode } from "jwt-decode";
 
@@ -14,28 +12,32 @@ export default function Allorders() {
   const [orders, setOrders] = useState(null);
   // get user id from token
   const { token } = useContext(TokenContext);
+
+  // get orders
+  const getOrders = useCallback(
+    function getOrders() {
+      return axios
+        .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
+        .then((res) => {
+          setOrders(res.data.pop());
+          setLoading(false);
+          return res;
+        })
+        .catch((err) => {
+          setLoading(false);
+          return err;
+        });
+    },
+    [id]
+  );
+
   useEffect(() => {
     if (!token) return;
     getOrders();
-  }, []);
+  }, [getOrders, token]);
 
   if (!token) return;
   const { id } = jwtDecode(token);
-
-  // get orders
-  function getOrders() {
-    return axios
-      .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
-      .then((res) => {
-        setOrders(res.data.pop());
-        setLoading(false);
-        return res;
-      })
-      .catch((err) => {
-        setLoading(false);
-        return err;
-      });
-  }
 
   return (
     <>

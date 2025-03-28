@@ -9,21 +9,20 @@ export default function Products() {
     return axios.get(`https://ecommerce.routemisr.com/api/v1/products`);
   }
 
-  let { isLoading, data, isError } = useQuery("featuerProducts", getProducts);
+  const { isLoading, data, isError } = useQuery("featuerProducts", getProducts);
+
+  if (isLoading) return <Loading />;
+
+  if (isError) return <div className='alert alert-danger'>{isError}</div>;
 
   return (
     <>
       <div className='container py-5'>
-        {isError && <div className='alert alert-danger'>{isError}</div>}
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <div className='row gy-4'>
-            {data?.data.data.map((product) => (
-              <ProductItem key={product._id} product={product} />
-            ))}
-          </div>
-        )}
+        <div className='row gy-4'>
+          {data?.data.data.map((product) => (
+            <ProductItem key={product._id} product={product} />
+          ))}
+        </div>
       </div>
     </>
   );

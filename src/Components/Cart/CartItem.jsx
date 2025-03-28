@@ -52,7 +52,7 @@ export default function CartItem({ product }) {
               Price : <span>{product.price}</span>
             </p>
             <p
-              className='cursor-pointer'
+              className={loading.delete ? "not-allowed" : "cursor-pointer"}
               onClick={() => deletItem(product.product.id)}
               disabled={loading.delete}
             >
@@ -63,12 +63,14 @@ export default function CartItem({ product }) {
                 </>
               ) : (
                 <>
-                  <i className='fa-solid fa-trash text-main me-2'></i>
+                  <i className='fa-solid fa-trash text-danger me-2'></i>
                   Remove
                 </>
               )}
             </p>
           </div>
+
+          {/* counter buttons */}
           <div className='col-sm-3'>
             <button
               disabled={loading.changeCounter}
