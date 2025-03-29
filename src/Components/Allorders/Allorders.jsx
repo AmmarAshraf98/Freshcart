@@ -4,42 +4,42 @@ import Loading from "../Loading/Loading";
 import axios from "axios";
 import { useToken } from "../../Context/Token";
 import { jwtDecode } from "jwt-decode";
-
+// import jwtDecode from "jwt-decode";
 export default function Allorders() {
+  console.log("allorders page");
+
   // loading
   const [loading, setLoading] = useState(true);
   //   orders
   const [orders, setOrders] = useState(null);
   // get user id from token
+
   const {
     user: { token },
   } = useToken();
+  console.log(token);
+
+  const { id } = token ? jwtDecode(token) : {};
 
   // get orders
-  const getOrders = useCallback(
-    function getOrders() {
-      return axios
-        .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
-        .then((res) => {
-          setOrders(res.data.pop());
-          setLoading(false);
-          return res;
-        })
-        .catch((err) => {
-          setLoading(false);
-          return err;
-        });
-    },
-    [id]
-  );
+  const getOrders = useCallback(async () => {
+    return axios
+      .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
+      .then((res) => {
+        setOrders(res?.data.pop());
+        setLoading(false);
+        return res;
+      })
+      .catch((err) => {
+        setLoading(false);
+        return err;
+      });
+  }, [id]);
 
   useEffect(() => {
     if (!token) return;
     getOrders();
-  }, [getOrders, token]);
-
-  if (!token) return;
-  const { id } = jwtDecode(token);
+  }, [token, getOrders]);
 
   return (
     <>
@@ -52,28 +52,29 @@ export default function Allorders() {
         <div className='mi-h-70'>
           <div className='container my-5 py-4 bg-main-light'>
             <h2 className='text-center m-4'>
-              Hi, <span className='text-main fw-bold'>{orders.user.name}</span>
+              Hi,{" "}
+              <span className='text-main fw-bold'>{orders?.user?.name}</span>
               <br />
               Your orders are preparing to be shipped{" "}
               <i className='fa-regular fa-circle-check fs-3 text-main'></i>
             </h2>
             <h6 className=' fw-bold'>
               Total Price :{" "}
-              <span className='text-main'>{orders.totalOrderPrice} </span>EGP
+              <span className='text-main'>{orders?.totalOrderPrice} </span>EGP
             </h6>
             <h6 className='fw-bold'>
               Total Cart Items :{" "}
-              <span className='text-main'>{orders.cartItems.length}</span>{" "}
+              <span className='text-main'>{orders?.cartItems?.length}</span>{" "}
               Products
             </h6>
-            {orders?.cartItems.map((product) => (
+            {orders?.cartItems?.map((product) => (
               <div
                 className='row align-items-center p-1'
-                key={product.product.id}
+                key={product?.product.id}
               >
                 <div className='col-md-1'>
                   <img
-                    src={product.product.imageCover}
+                    src={product?.product.imageCover}
                     alt='your product'
                     className='w-100'
                     height={100}
@@ -83,14 +84,17 @@ export default function Allorders() {
                   <div className='row align-items-center'>
                     <div className='col-sm-11'>
                       <p>
-                        {product.product.title.split(" ").slice(0, 3).join(" ")}
+                        {product?.product?.title
+                          ?.split(" ")
+                          .slice(0, 3)
+                          .join(" ")}
                       </p>
                       <p className='text-main'>
-                        Price : <span>{product.price}</span>
+                        Price : <span>{product?.price}</span>
                       </p>
                     </div>
                     <div className='col-sm-1'>
-                      <span className='mx-2'>{product.count}</span>
+                      <span className='mx-2'>{product?.count}</span>
                     </div>
                   </div>
                 </div>

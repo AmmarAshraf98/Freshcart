@@ -50,7 +50,7 @@ export default function CartContextProvider(props) {
           setDataInformation({
             products: data?.data?.data.products,
             totalPrice: data?.data?.data?.totalCartPrice,
-            cartId: data?.data?._id,
+            cartId: data?.data?.cartId,
           });
         }
       })

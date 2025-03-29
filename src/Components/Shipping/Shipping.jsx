@@ -1,23 +1,29 @@
 import { useFormik } from "formik";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import * as Yup from "yup";
 import { useToken } from "../../Context/Token";
 import axios from "axios";
 import { CartContext } from "../../Context/Cart";
 
 export default function Shipping() {
+  const [loading, setLoading] = useState(false);
+
   // get token
   const {
     user: { token },
   } = useToken();
-  const { cartId } = useContext(CartContext);
+
+  const {
+    dataInformation: { cartId },
+  } = useContext(CartContext);
 
   let headers = {
-    token: token,
+    token,
   };
 
   // pay online
   function payment(values) {
+    setLoading(true);
     return axios
       .post(
         `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=https://freshcart-sable-nine.vercel.app`,
@@ -31,7 +37,8 @@ export default function Shipping() {
       .then((response) => {
         return response;
       })
-      .catch((err) => err);
+      .catch((err) => err)
+      .finally(() => setLoading(false));
   }
 
   //   call Api
@@ -86,7 +93,6 @@ export default function Shipping() {
                 </div>
               )}
             </div>
-
             <div className='form-group mb-3'>
               <label htmlFor='phone' className='mb-1'>
                 Phone :
@@ -106,7 +112,6 @@ export default function Shipping() {
                 </div>
               )}
             </div>
-
             <div className='form-group mb-3'>
               <label htmlFor='city' className='mb-1'>
                 City :
@@ -126,9 +131,17 @@ export default function Shipping() {
                 </div>
               )}
             </div>
-
-            <button className='btn bg-main text-white' type='submit'>
-              Pay now
+            <button
+              className={`btn bg-main text-white w-100 my-2 ${
+                loading ? "not-allowed" : ""
+              }`}
+              disabled={loading}
+            >
+              {loading ? (
+                <i className='fa-solid fa-spinner fa-spin mx-1'></i>
+              ) : (
+                "add to cart"
+              )}
             </button>
           </form>
         </div>
