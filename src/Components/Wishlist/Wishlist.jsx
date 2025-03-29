@@ -13,8 +13,8 @@ export default function Wishlist() {
   if (!wishListItems.length > 0) return <Empty message='empty wishlist !🪹' />;
 
   return (
-    <section className='mi-h-60 '>
-      <div className='container'>
+    <section className='mi-h-60'>
+      <div className='container my-4 bg-main-light'>
         {wishListItems?.map((product) => (
           <WishlistItem key={product._id} product={product} />
         ))}

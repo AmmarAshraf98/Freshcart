@@ -63,9 +63,9 @@ export default function ProductDetails() {
   const productId = data?.data.data._id;
 
   // add
-  async function addToWishList() {
+  async function addToWishList(id) {
     if (token) {
-      const { data } = await addTolist(productId);
+      const { data } = await addTolist(id);
       toast.success(data?.message, {
         position: "top-right",
       });
@@ -116,26 +116,21 @@ export default function ProductDetails() {
           {/* row of data */}
           <div className='col-md-8 px-5 px-md-0'>
             <div className='d-flex align-items-center justify-content-between mb-3'>
-              <span className='d-block'>
-                remove
-                <i
-                  className='fa-regular fa-heart text-main cursor-pointer mx-1'
-                  onClick={() => {
-                    removeFromWishList(data?.data.data._id);
-                  }}
-                ></i>
-              </span>
+              <WishBtn
+                type={"delete"}
+                onClick={removeFromWishList}
+                productId={productId}
+              >
+                Remove
+              </WishBtn>
+
               <WishBtn
                 type={"add"}
                 onClick={addToWishList}
                 productId={productId}
-              />
-              {/* <span className='d-block'>
-                <i
-                  className='fa-solid fa-heart text-main cursor-pointer mx-1'
-                  onClick={() => addToWishList(data?.data.data._id)}
-                ></i>
-              </span> */}
+              >
+                Add
+              </WishBtn>
             </div>
 
             <h2 className='mb-2'>{data?.data.data.title}</h2>

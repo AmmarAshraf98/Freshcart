@@ -6,8 +6,6 @@ import { useToken } from "../../Context/Token";
 import { jwtDecode } from "jwt-decode";
 // import jwtDecode from "jwt-decode";
 export default function Allorders() {
-  console.log("allorders page");
-
   // loading
   const [loading, setLoading] = useState(true);
   //   orders
@@ -17,7 +15,6 @@ export default function Allorders() {
   const {
     user: { token },
   } = useToken();
-  console.log(token);
 
   const { id } = token ? jwtDecode(token) : {};
 

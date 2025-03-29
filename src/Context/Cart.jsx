@@ -26,6 +26,7 @@ export default function CartContextProvider(props) {
   const {
     user: { token },
   } = useToken();
+
   const headers = useMemo(() => ({ token: token }), [token]);
 
   // method to get products from api

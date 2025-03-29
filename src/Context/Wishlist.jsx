@@ -1,12 +1,14 @@
 import {
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 import { useToken } from "./Token";
 import axios from "axios";
+import { CartContext } from "./Cart";
 
 export const wishContext = createContext();
 
@@ -16,7 +18,10 @@ export default function WishlistProvider(props) {
 
   // state for wish items
   const [wishListItems, setWishListItems] = useState(null);
-  // const [wishListCount, setWishListCount] = useState(0);
+
+  const { productList } = useContext(CartContext);
+
+  const allProduct = productList?.data?.data;
 
   //get token to be sent to database with each request
   const {
@@ -42,6 +47,10 @@ export default function WishlistProvider(props) {
         }
       )
       .then((response) => {
+        const wishListItems = response?.data?.data;
+        setWishListItems(
+          allProduct.filter((item) => wishListItems.some((p) => p === item._id))
+        );
         return response;
       })
       .catch((error) => error);
