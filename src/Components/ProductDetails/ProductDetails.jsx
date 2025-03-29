@@ -5,15 +5,18 @@ import { useParams } from "react-router-dom";
 import Ratting from "../Ratting/Ratting";
 import Loading from "../Loading/Loading";
 import { CartContext } from "../../Context/Cart";
-import { TokenContext } from "../../Context/Token";
+import { useToken } from "../../Context/Token";
 import toast from "react-hot-toast";
 import Slider from "react-slick";
 import { wishContext } from "../../Context/Wishlist";
+import WishBtn from "../utilities/WishBtn";
 
 export default function ProductDetails() {
   const [isClicked, setIsClicked] = useState(false);
   // get token id excist
-  let { token } = useContext(TokenContext);
+  let {
+    user: { token },
+  } = useToken();
 
   // get id by using params hooks
   let { id } = useParams();
@@ -57,10 +60,12 @@ export default function ProductDetails() {
     arrows: false,
   };
 
+  const productId = data?.data.data._id;
+
   // add
-  async function addToWishList(id) {
+  async function addToWishList() {
     if (token) {
-      const { data } = await addTolist(id);
+      const { data } = await addTolist(productId);
       toast.success(data?.message, {
         position: "top-right",
       });
@@ -109,24 +114,28 @@ export default function ProductDetails() {
           </div>
 
           {/* row of data */}
-          <div className='col-md-8'>
+          <div className='col-md-8 px-5 px-md-0'>
             <div className='d-flex align-items-center justify-content-between mb-3'>
-              <span className='d-block'>
-                add
-                <i
-                  className='fa-regular fa-heart text-main cursor-pointer mx-1'
-                  onClick={() => addToWishList(data?.data.data._id)}
-                ></i>
-              </span>
               <span className='d-block'>
                 remove
                 <i
-                  className='fa-solid fa-heart text-main cursor-pointer mx-1'
+                  className='fa-regular fa-heart text-main cursor-pointer mx-1'
                   onClick={() => {
                     removeFromWishList(data?.data.data._id);
                   }}
                 ></i>
               </span>
+              <WishBtn
+                type={"add"}
+                onClick={addToWishList}
+                productId={productId}
+              />
+              {/* <span className='d-block'>
+                <i
+                  className='fa-solid fa-heart text-main cursor-pointer mx-1'
+                  onClick={() => addToWishList(data?.data.data._id)}
+                ></i>
+              </span> */}
             </div>
 
             <h2 className='mb-2'>{data?.data.data.title}</h2>

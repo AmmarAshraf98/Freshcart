@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { wishContext } from "../../Context/Wishlist";
-import { TokenContext } from "../../Context/Token";
+import { useToken } from "../../Context/Token";
 import toast from "react-hot-toast";
 import { CartContext } from "../../Context/Cart";
 import { Link } from "react-router-dom";
@@ -10,7 +10,9 @@ export default function ProductItem({ product }) {
   const [isClicked, setIsClicked] = useState(false);
 
   // get token to check if user is logged in before order
-  let { token } = useContext(TokenContext);
+  let {
+    user: { token },
+  } = useToken();
 
   // Wish list method
   const { addTolist, getWishProduct } = useContext(wishContext);

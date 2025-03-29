@@ -1,12 +1,11 @@
 import {
   createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { TokenContext } from "./Token";
+import { useToken } from "./Token";
 import axios from "axios";
 
 export const wishContext = createContext();
@@ -20,7 +19,10 @@ export default function WishlistProvider(props) {
   // const [wishListCount, setWishListCount] = useState(0);
 
   //get token to be sent to database with each request
-  const { token } = useContext(TokenContext);
+  const {
+    user: { token },
+  } = useToken();
+
   const headers = useMemo(() => {
     return {
       token: token,

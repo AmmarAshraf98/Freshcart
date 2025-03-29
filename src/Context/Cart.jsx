@@ -1,12 +1,11 @@
 import {
   createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { TokenContext } from "./Token";
+import { useToken } from "./Token";
 import axios from "axios";
 import { useQuery } from "react-query";
 
@@ -24,7 +23,9 @@ export default function CartContextProvider(props) {
   });
 
   //get token to be sent to database with each request
-  const { token } = useContext(TokenContext);
+  const {
+    user: { token },
+  } = useToken();
   const headers = useMemo(() => ({ token: token }), [token]);
 
   // method to get products from api

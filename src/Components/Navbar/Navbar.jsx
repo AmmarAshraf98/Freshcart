@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../images/freshcart-logo.svg";
-import { TokenContext } from "../../Context/Token";
+import { TokenContext, useToken } from "../../Context/Token";
 import { CartContext } from "../../Context/Cart";
 import { wishContext } from "../../Context/Wishlist";
 
@@ -9,7 +9,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   // token to handle display UI
-  const { token, setToken } = useContext(TokenContext);
+  const { user, removeUserData } = useToken();
 
   // number of cart items
   const {
@@ -24,8 +24,7 @@ export default function Navbar() {
 
   // logout method depend on token in local storage
   function logOut() {
-    localStorage.removeItem("userToken");
-    setToken(null);
+    removeUserData();
     navigate("/");
   }
 
@@ -36,9 +35,8 @@ export default function Navbar() {
           <Link className='navbar-brand text-white' to={"/"}>
             <img src={logo} className='w-100' alt='fresh cart logo' />
           </Link>
-
           <button
-            className='navbar-toggler'
+            className='navbar-toggler px-1'
             type='button'
             data-bs-toggle='collapse'
             data-bs-target='#navbarSupportedContent'
@@ -46,9 +44,8 @@ export default function Navbar() {
             aria-expanded='false'
             aria-label='Toggle navigation'
           >
-            <span className='navbar-toggler-icon'></span>
+            <span className='navbar-toggler-icon font-sm'></span>
           </button>
-
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
               <li className='nav-item'>
@@ -73,13 +70,13 @@ export default function Navbar() {
               </li>
             </ul>
             <ul className='navbar-nav ms-auto mb-2 mb-lg-0'>
-              <li className='nav-item d-flex align-items-center'>
+              {/*    <li className='nav-item d-flex align-items-center'>
                 <i className='fa-brands mx-2 fa-facebook'></i>
                 <i className='fa-brands mx-2 fa-instagram'></i>
-              </li>
+              </li> */}
 
               {/* show links depend on token */}
-              {token ? (
+              {user?.token ? (
                 <>
                   <li className='nav-item d-flex mx-1 my-2 align-items-center'>
                     <NavLink className='' to={"cart"}>
@@ -102,7 +99,7 @@ export default function Navbar() {
                     </NavLink>
                   </li>
                   <li className='nav-item md-ms-2'>
-                    <button className='nav-link' onClick={logOut}>
+                    <button className='nav-link  text-danger' onClick={logOut}>
                       Logout
                     </button>
                   </li>
@@ -123,6 +120,13 @@ export default function Navbar() {
               )}
             </ul>
           </div>
+
+          {user?.token && (
+            <p className='font-xs mb-0 d-none ms-lg-4 d-lg-block '>
+              Hi <span className='text-main fw-bold'>{user?.name}</span>
+              👽
+            </p>
+          )}
         </div>
       </nav>
     </>

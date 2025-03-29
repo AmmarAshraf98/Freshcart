@@ -8,8 +8,6 @@ import Contact from "./Components/Contact/Contact.jsx";
 import Login from "./Components/Login/Login.jsx";
 import Register from "./Components/Register/Register.jsx";
 import Cart from "./Components/Cart/Cart.jsx";
-import { useContext, useEffect } from "react";
-import { TokenContext } from "./Context/Token.jsx";
 import ProtectedRoutes from "./Components/ProtectedRoutes/ProtectedRoutes.jsx";
 import ProductDetails from "./Components/ProductDetails/ProductDetails.jsx";
 import ProtectAuth from "./Components/ProtectAuth/ProtectAuth.jsx";
@@ -22,8 +20,6 @@ import Allorders from "./Components/Allorders/Allorders.jsx";
 import Brands from "./Components/Brands/Brands.jsx";
 
 function App() {
-  let { setToken } = useContext(TokenContext);
-
   let routes = createBrowserRouter([
     {
       path: "/",
@@ -110,13 +106,6 @@ function App() {
       ],
     },
   ]);
-
-  // check if token is excist in localstorage to save it in context
-  useEffect(() => {
-    if (localStorage.getItem("userToken")) {
-      setToken(localStorage.getItem("userToken"));
-    }
-  }, [setToken]);
 
   return <RouterProvider router={routes}></RouterProvider>;
 }

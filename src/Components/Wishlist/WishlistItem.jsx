@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { TokenContext } from "../../Context/Token";
+import { TokenContext, useToken } from "../../Context/Token";
 import { CartContext } from "../../Context/Cart";
 import { wishContext } from "../../Context/Wishlist";
 import toast from "react-hot-toast";
@@ -15,7 +15,9 @@ export default function WishlistItem({ product }) {
   const { addToCart } = useContext(CartContext);
 
   // get token to check before add product
-  const { token } = useContext(TokenContext);
+  const {
+    user: { token },
+  } = useToken();
 
   const { removeFromList } = useContext(wishContext);
 

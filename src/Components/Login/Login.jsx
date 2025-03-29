@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { TokenContext } from "../../Context/Token";
+import { useToken } from "../../Context/Token";
 import { Helmet } from "react-helmet-async";
+
 export default function Login() {
   // Loading
   const [Loading, setLoading] = useState(false);
@@ -12,6 +13,8 @@ export default function Login() {
   const [errorMesage, seterrorMesage] = useState("");
   let navigate = useNavigate();
   // validation schema
+  const { saveUSerData } = useToken();
+  //
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Email is not valid")
@@ -25,16 +28,13 @@ export default function Login() {
       .required("Password is required"),
   });
 
-  const { setToken } = useContext(TokenContext);
-
   async function callLogApi(requestBody) {
     seterrorMesage("");
     setLoading(true);
     return axios
       .post(`https://ecommerce.routemisr.com/api/v1/auth/signin`, requestBody)
       .then(({ data }) => {
-        localStorage.setItem("userToken", data.token);
-        setToken(data.token);
+        saveUSerData(data);
         navigate("/");
       })
       .catch((error) => {

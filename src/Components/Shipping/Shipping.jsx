@@ -1,13 +1,15 @@
 import { useFormik } from "formik";
 import React, { useContext } from "react";
 import * as Yup from "yup";
-import { TokenContext } from "../../Context/Token";
+import { useToken } from "../../Context/Token";
 import axios from "axios";
 import { CartContext } from "../../Context/Cart";
 
 export default function Shipping() {
   // get token
-  const { token } = useContext(TokenContext);
+  const {
+    user: { token },
+  } = useToken();
   const { cartId } = useContext(CartContext);
 
   let headers = {
@@ -60,7 +62,7 @@ export default function Shipping() {
   });
 
   return (
-    <>
+    <div className='mi-h-70'>
       <div className='container'>
         <div className='bg-main-light py-5 my-5'>
           <h2 className='text-main text-center mb-5'>Shipping Address</h2>
@@ -131,6 +133,6 @@ export default function Shipping() {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

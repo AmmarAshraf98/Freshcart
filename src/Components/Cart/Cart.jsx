@@ -6,7 +6,7 @@ import { CartContext } from "../../Context/Cart";
 
 import Loading from "../Loading/Loading";
 import CartItem from "./CartItem";
-import Empty from "../Utilites/Empty";
+import Empty from "../utilities/Empty";
 
 export default function Cart() {
   // get function from

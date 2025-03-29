@@ -3,7 +3,7 @@ import { wishContext } from "../../Context/Wishlist";
 import Loading from "../Loading/Loading";
 
 import WishlistItem from "./WishlistItem";
-import Empty from "../Utilites/Empty";
+import Empty from "../utilities/Empty";
 
 export default function Wishlist() {
   const { loading, wishListItems } = useContext(wishContext);
