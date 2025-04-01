@@ -76,20 +76,6 @@ export default function CartItem({ product }) {
 
             <div className='col-7 d-flex align-items-center flex-sm-row justify-content-end'>
               <button
-                disabled={loading.changeCounter}
-                className='btn btn-outline-success px-2 py-1'
-                onClick={() =>
-                  setProductCount(product?.product?.id, product.count + 1)
-                }
-              >
-                {loading.changeCounter ? (
-                  <i className='fa-solid fa-spinner fa-spin'></i>
-                ) : (
-                  "+"
-                )}
-              </button>
-              <span className='mx-2'>{product.count}</span>
-              <button
                 className='btn btn-outline-success px-2 py-1'
                 onClick={() =>
                   setProductCount(product?.product.id, product.count - 1)
@@ -100,6 +86,22 @@ export default function CartItem({ product }) {
                   <i className='fa-solid fa-spinner fa-spin fa-xs'></i>
                 ) : (
                   "-"
+                )}
+              </button>
+
+              <span className='mx-2'>{product.count}</span>
+
+              <button
+                disabled={loading.changeCounter}
+                className='btn btn-outline-success px-2 py-1'
+                onClick={() =>
+                  setProductCount(product?.product?.id, product.count + 1)
+                }
+              >
+                {loading.changeCounter ? (
+                  <i className='fa-solid fa-spinner fa-spin'></i>
+                ) : (
+                  "+"
                 )}
               </button>
             </div>
