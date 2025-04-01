@@ -16,7 +16,7 @@ export default function WishBtn({ type, productId, onClick, children }) {
       disabled={clicked}
     >
       {clicked ? (
-        <>⏳ adding</>
+        <>⏳ {type === "add" ? "Adding" : "Deleting"}</>
       ) : (
         <>
           {children}
