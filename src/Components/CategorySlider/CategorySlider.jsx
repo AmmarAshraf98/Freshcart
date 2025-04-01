@@ -42,7 +42,7 @@ export default function CategorySlider() {
   };
 
   async function callCateApi() {
-    let { data } = await axios.get(
+    const { data } = await axios.get(
       `https://ecommerce.routemisr.com/api/v1/categories`
     );
     setCategory(data.data);
@@ -55,21 +55,21 @@ export default function CategorySlider() {
 
   return (
     <>
-      <div className="container my-5">
-        <h2 className="mb-3">Shop Popular Categories</h2>
+      <div className='container my-5'>
+        <h2 className='mb-3'>Shop Popular Categories</h2>
         {loading ? (
           <Loading />
         ) : (
           <Slider {...settings}>
             {category.map((cate) => (
-              <div className="overflow-hidden" key={cate._id}>
+              <div className='overflow-hidden' key={cate._id}>
                 <img
                   src={cate.image}
                   height={200}
-                  className="w-100 mx-1"
-                  alt="our category items"
+                  className='w-100 mx-1  object-fit-cover'
+                  alt='our category items'
                 />
-                <p className="">{cate.name.split(" ").slice(0, 2)}</p>
+                <p className=''>{cate.name.split(" ").slice(0, 2)}</p>
               </div>
             ))}
           </Slider>
