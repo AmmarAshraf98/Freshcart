@@ -80,7 +80,7 @@ export default function CartItem({ product }) {
                 onClick={() =>
                   setProductCount(product?.product.id, product.count - 1)
                 }
-                disabled={product.count === 1 || loading.changeCounter}
+                disabled={product?.count === 1 || loading.changeCounter}
               >
                 {loading.changeCounter ? (
                   <i className='fa-solid fa-spinner fa-spin fa-xs'></i>
@@ -89,7 +89,7 @@ export default function CartItem({ product }) {
                 )}
               </button>
 
-              <span className='mx-2'>{product.count}</span>
+              <span className='mx-2'>{product?.count}</span>
 
               <button
                 disabled={loading.changeCounter}

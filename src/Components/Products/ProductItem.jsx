@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import Ratting from "../Ratting/Ratting";
 
 export default function ProductItem({ product }) {
+  console.log("product", product);
+
   const [isClicked, setIsClicked] = useState(false);
 
   // get token to check if user is logged in before order
@@ -66,7 +68,7 @@ export default function ProductItem({ product }) {
 
       <Link to={"details/" + product._id}>
         <img src={product.imageCover} className='w-100 mb-2' alt='' />
-        <h2 className='h6 text-main'>{product.brand.name}</h2>
+        <h2 className='h6 text-main'>{product?.title}</h2>
         <p className='mb-1'>{product.category.name}</p>
         <Ratting price={product.price} rate={product.ratingsAverage} />
       </Link>
